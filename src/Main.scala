@@ -39,6 +39,8 @@ object Main extends JFXApp {
   val moveSpeed =   8
   val sceneWidth = gridWidth*squareSize
   val sceneHeight = (gridHeight-1)*squareSize
+  case class p2D(x:Int,y:Int)
+  var firstSelected:Option[p2D] = None
   
   val gemGrid = new GemMap(gridWidth,gridHeight,squareSize)
   //GemGrid.generateMap()
@@ -49,16 +51,17 @@ object Main extends JFXApp {
 
       var upPressed, downPressed, leftPressed, rightPressed = false
       val canvas = new Canvas(sceneWidth,sceneHeight)
-      val gc = canvas.graphicsContext2D
+      val gc:GraphicsContext = canvas.graphicsContext2D
       val renderer = new Renderer(squareSize,gc)
       canvas.onMouseClicked = (me: MouseEvent) => { 
         val gdX = me.sceneX.toInt/squareSize
         val gdY = me.sceneY.toInt/squareSize+1
-        gemGrid(gdX,gdY).removeGem
-
+        if (firstSelected.isEmpty) {
+          //gemGrid(gdX,gdY).removeGem
+        }
       }
      
-      var currentDirection = new Point2D(0,1)
+      var currentDirection = Point2D(0,1)
       content = canvas
       canvas.requestFocus
 
@@ -73,7 +76,7 @@ object Main extends JFXApp {
           gemGrid.updateGrid
 
          
-          renderer.render(gemGrid.getArray)
+          renderer.render(gemGrid.getArray())
         }
       }
       timer.start
