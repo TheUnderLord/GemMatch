@@ -10,7 +10,15 @@ class Gem(t:Int,inX:Int,inY:Int) {
   var finishedDescending = false
   var offsetX = 0
   var offsetY = 0
+
   var isSwapping = false
+  var swapDirection = (0,0)
+
+  var scale = 1.0
+  def select(t:Boolean) = {
+    isSelected = t
+    if (t) scale = 1.1 else scale = 1
+  }
   
   private val _x = inX
   private val _y = inY
@@ -21,6 +29,7 @@ class Gem(t:Int,inX:Int,inY:Int) {
   def getId():Int = {
     id
   }
+
   def getImage = {
     id match {
       case 1 => Gem.img1
@@ -35,6 +44,7 @@ class Gem(t:Int,inX:Int,inY:Int) {
   }
   def removeGem = {
     markRemove = true
+
   }
 
   def updateGem = {

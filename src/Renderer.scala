@@ -9,7 +9,8 @@ class Renderer(BoxSize:Int,gc:GraphicsContext) {
     gc.fillRect(0,0,10000,10000)
     a.foreach{ m =>
       m.foreach{ j =>
-        gc.drawImage(j.getImage, j.x*BoxSize+j.offsetX, (j.y-1)*BoxSize+j.offsetY-1, BoxSize, BoxSize)
+        val offset = (BoxSize - BoxSize*j.scale)/2
+        gc.drawImage(j.getImage, j.x*BoxSize+j.offsetX+offset, (j.y-1)*BoxSize+j.offsetY-1+offset, BoxSize*j.scale, BoxSize*j.scale)
       }
     }
   }

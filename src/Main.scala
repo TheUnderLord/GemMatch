@@ -42,22 +42,40 @@ object Main extends JFXApp {
   case class p2D(x:Int,y:Int)
   var firstSelected:Option[p2D] = None
   
-  val gemGrid = new GemMap(gridWidth,gridHeight,squareSize)
+  val gemGrid = new GemMap(gridWidth,gridHeight,squareSize) //Holds the main app data
   //GemGrid.generateMap()
   case class Point2D(x:Int,y:Int)
   stage = new PrimaryStage {
     title = "maze"
     scene = new Scene(sceneWidth,sceneHeight) {
 
-      var upPressed, downPressed, leftPressed, rightPressed = false
+
       val canvas = new Canvas(sceneWidth,sceneHeight)
       val gc:GraphicsContext = canvas.graphicsContext2D
       val renderer = new Renderer(squareSize,gc)
       canvas.onMouseClicked = (me: MouseEvent) => { 
         val gdX = me.sceneX.toInt/squareSize
         val gdY = me.sceneY.toInt/squareSize+1
-        if (firstSelected.isEmpty) {
           //gemGrid(gdX,gdY).removeGem
+          if (firstSelected.isEmpty) { //This block is for setting up a swap
+            if (gemGrid.descendingGems == 0){
+              gemGrid(gdX,gdY).select(true)
+              firstSelected = Some(p2D(gdX,gdY))
+            }
+        } else {
+            val sX = firstSelected.get.x
+            val sY = firstSelected.get.y
+
+          if (sX == gdX && sY == gdY) { //the same gem is clicked again
+
+          } else if((math.abs(sX-gdX) == 1 && sY == gdY) ^ (math.abs(sY-gdY) == 1 && sX == gdX)){
+            gemGrid.finishedSwap = false
+            gemGrid.swap(sX,sY,gdX,gdY)
+
+            println("swap")
+          }
+            gemGrid(sX,sY).select(false)
+            firstSelected = None
         }
       }
      
